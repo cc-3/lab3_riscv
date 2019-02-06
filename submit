@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+
+{
+
+  # REPO NAME
+  REPO='lab3_riscv'
+
+  title() {
+    printf "   ___       __                        __       \n"
+    printf "  / _ |__ __/ /____  ___  _______ ____/ /__ ____\n"
+    printf " / __ / // / __/ _ \/ _ \\/ __/ _ \\/ _  / -_) __/\n"
+    printf "/_/ |_\\_,_/\\__/\\___/\\_, /_/  \\_,_/\\_,_/\\__/_/\n"
+    printf "                   /___/\n\n"
+    printf "             Machine Structures\n"
+    printf "     Great Ideas in Computer Architecture\n\n"
+    printf "lab: $REPO\n\n"
+  }
+
+  # verifies if a command exists
+  # @param $1 command to verify
+  has() {
+    type "$1" > /dev/null 2>&1
+  }
+
+  # downloads a submit.py script
+  download() {
+    printf "downloading autograder script...\n"
+    local URL="https://raw.githubusercontent.com/cc-3/submit/master/${REPO}/submit.py"
+    if has 'curl'; then
+      curl "$URL" -L -o "submit.py" > /dev/null 2>&1
+      return
+    elif has 'wget'; then
+      wget -O "submit.py" "$URL" > /dev/null 2>&1
+      return
+    fi
+    return 1
+  }
+
+  # cleans directory
+  clean() {
+    rm -rf autograder
+    mkdir autograder
+  }
+
+  # calls submit script
+  autograder() {
+    title
+    clean
+    # also test if curl or wget is available
+    if ! has 'wget' || ! has 'curl'; then
+      printf "you need curl or wget to downdload the autograder script\n"
+      exit 1
+    fi
+    # download script
+    cd autograder
+    download || {
+      printf "an error ocurred while downloading submit script, try agin...\n"
+      cd ..
+      exit 1
+    }
+    # call autograder submit script
+    cd ..
+    python ./autograder/submit.py $@
+  }
+
+  autograder $@
+}
