@@ -3,9 +3,9 @@
 
 .text
 
-.globl main
+.globl __start
 
-main:
+__start:
   li t0, 0
   li t1, 1
   la t3, n
