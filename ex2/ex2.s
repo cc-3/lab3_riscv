@@ -25,9 +25,9 @@ dest:
 
 .text
 
-.globl main
+.globl __start
 
-main:
+__start:
   li t0, 0
   la t1, source
   la t2, dest
