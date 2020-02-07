@@ -4,9 +4,9 @@ end_msg:    .asciiz "List after: "
 
 .text
 
-.globl main
+.globl __start
 
-main:
+__start:
   jal create_default_list
   mv s0, a0 # a0 = s0 is head of node list
   # print list
