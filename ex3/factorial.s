@@ -4,9 +4,9 @@
 
 .text
 
-.globl main
+.globl __start
 
-main:
+__start:
   li a0, 4
   la a1, msg1
   ecall # Print string
